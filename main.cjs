@@ -1,5 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const { autoUpdater } = require('electron-updater');
+
+// Disable automatic downloading for Phase 3
+autoUpdater.autoDownload = false;
 
 const isDev = !app.isPackaged;
 
@@ -23,6 +27,34 @@ function createWindow() {
 
 app.whenReady().then(() => {
   ipcMain.handle('get-version', () => app.getVersion());
+  
+  ipcMain.handle('check-for-updates', async () => {
+    if (!app.isPackaged) {
+      console.log('Update check skipped in development mode.');
+      return null;
+    }
+    console.log('Checking for updates...');
+    try {
+      const result = await autoUpdater.checkForUpdates();
+      return result;
+    } catch (error) {
+      console.error('Failed to check for updates:', error);
+      return null;
+    }
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('Update available:', info.version);
+  });
+
+  autoUpdater.on('update-not-available', (info) => {
+    console.log('Update not available. Current version is latest.');
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('Error in auto-updater:', err);
+  });
+
   createWindow();
 
   app.on('activate', () => {

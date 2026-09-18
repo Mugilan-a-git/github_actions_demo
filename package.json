@@ -23,12 +23,21 @@
     "win": {
       "target": "nsis"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Mugilan-a-git",
+        "repo": "github_actions_demo"
+      }
+    ],
     "files": [
       "dist/**/*",
-      "main.cjs"
+      "main.cjs",
+      "preload.cjs"
     ]
   },
   "dependencies": {
+    "electron-updater": "^6.8.9",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
