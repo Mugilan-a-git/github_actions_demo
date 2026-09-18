@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 const isDev = !app.isPackaged;
@@ -9,7 +9,8 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      preload: path.join(__dirname, 'preload.cjs')
     }
   });
 
@@ -21,6 +22,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  ipcMain.handle('get-version', () => app.getVersion());
   createWindow();
 
   app.on('activate', () => {
