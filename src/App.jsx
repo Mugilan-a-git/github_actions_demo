@@ -79,7 +79,7 @@ function App() {
 
   return (
     <div style={{ textAlign: 'center', padding: '50px', fontFamily: 'sans-serif' }}>
-      <h1>Hello World version 2.0</h1>
+      <h1>Hello World version 3.0</h1>
       <p>React + Electron</p>
       {version && <p>Version: {version}</p>}
       
