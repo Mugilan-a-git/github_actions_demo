@@ -5,6 +5,13 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: "Commit SHA to build (leave empty to use selected branch)"
+        required: false
+        type: string
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -12,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.commit || github.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,7 +37,9 @@ jobs:
         run: |
           $package = Get-Content package.json | ConvertFrom-Json
           $version = $package.version
+
           echo "version=$version" >> $env:GITHUB_OUTPUT
+
           Write-Host "Application version: $version"
 
       - name: Build Windows EXE
