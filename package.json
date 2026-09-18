@@ -17,6 +17,7 @@
   },
   "build": {
     "appId": "com.example.react-electron",
+    "artifactName": "${name}-${version}-setup.${ext}",
     "directories": {
       "output": "dist-electron"
     },
